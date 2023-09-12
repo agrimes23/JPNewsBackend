@@ -3,13 +3,14 @@ const axios = require("axios");
 const router = express.Router();
 require('dotenv').config();
 
-router.get('/kanji', async (req, res) => {
+router.get('/kanji/:level', async (req, res) => {
 
     try {
-        console.log("Request to /news received");
-        const response = await axios.get(
-            `https://jlpt-vocab-api.vercel.app/api/words`
-        );
+        console.log("Request to /kanji received");
+        const { level } = req.params;
+        const apiUrl =  `https://jlpt-vocab-api.vercel.app/api/words/all?level=${level}`;
+
+        const response = await axios.get(apiUrl);
         const kanjiData = response.data;
         res.json(kanjiData);
     } catch (error) {

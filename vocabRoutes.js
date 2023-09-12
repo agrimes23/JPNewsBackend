@@ -8,7 +8,7 @@ router.get('/kanji/:level', async (req, res) => {
     try {
         console.log("Request to /kanji received");
         const { level } = req.params;
-        const apiUrl =  `https://jlpt-vocab-api.vercel.app/api/words/all?level=${level}`;
+        const apiUrl =  `https://jlpt-vocab-api.vercel.app/api/words?limit=30&level=${level}`;
 
         const response = await axios.get(apiUrl);
         const kanjiData = response.data;

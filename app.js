@@ -5,7 +5,7 @@ const cors = require("cors")
 
 const newsRoutes = require('./routes/newsRoutes');
 const kanjiRoutes = require('./routes/vocabRoutes')
-const jsonTestRoutes = require('./routes/kanjiRoutes')
+const jsonTestRoutes = require('./routes/kanjiRoutes.js')
 
 app.use(cors());
 
@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api', newsRoutes)
-app.use('/api', kanjiRoutes)
+// app.use('/api', kanjiRoutes)
 app.use('/api', jsonTestRoutes)
 
 app.listen(port, () => {

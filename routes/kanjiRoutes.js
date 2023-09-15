@@ -19,7 +19,6 @@ router.get('/search', async (req, res) => {
   try {
     // Read the large N4 JSON file
     const n4data = JSON.parse(fs.readFileSync('./db/n4.json', 'utf8'));
-    console.log(JSON.stringify(newsRoutes.res) + ":::::::::: news route! :O")
     // Perform the search logic here
     const searchResults = performSearch(n4data, searchWords);
 

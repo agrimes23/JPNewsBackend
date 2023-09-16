@@ -1,5 +1,6 @@
 const express = require("express");
 const axios = require("axios");
+const newsInfo = require("./newsRoutes")
 const router = express.Router();
 require('dotenv').config();
 
@@ -9,8 +10,9 @@ router.get('/kanji/:level', async (req, res) => {
         console.log("Request to /kanji received, but have commented everything out :D");
 
         const n4data = JSON.parse(fs.readFileSync('./db/n4.json', 'utf8'));
+        const newsData = await newsInfo.getNewsData();
+        performSearch(newsData, n4data)
 
-        performSearch(response.data.articles, n4data)
 
     // Implement your search logic here (e.g., using lodash or custom code)
     function performSearch(newsDescData, searchWords) {

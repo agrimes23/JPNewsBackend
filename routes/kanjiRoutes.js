@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require('fs');
-const newsRoutes = require('./newsRoutes');
-
+const axios = require("axios");
 
 // Making this so it gets the news descriptions on the backend
 // it will:
@@ -17,40 +16,53 @@ const newsRoutes = require('./newsRoutes');
 router.get('/search', async (req, res) => {
 
   try {
+    console.log("Request to /search received, but have commented everything out :D");
+
+    const response = await axios.get(
+      `https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`
+  );
     // Read the large N4 JSON file
     const n4data = JSON.parse(fs.readFileSync('./db/n4.json', 'utf8'));
     // Perform the search logic here
-    const searchResults = performSearch(n4data, searchWords);
 
-    // Send the search results as a JSON response
-    res.json(searchResults);
+    console.log("response.data: " + JSON.stringify(response.data))
+    performSearch(response.data.articles, n4data)
+
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+
+  function performSearch(newsDescData, searchWords) {
+    const searchResults = [];
+  
+    // Loop through each search word
+    newsDescData.forEach((article) => {
+        if(article.description) {
+        searchWords.forEach((n4Word) => {
+            const pattern = new RegExp(n4Word.word, "i");
+    
+            // Search for the word in the news description using the regular expression pattern
+            const matchingWord = article.description.match(pattern);
+  
+            if(matchingWord != null) {
+                searchResults.push(matchingWord.toString());
+            }
+        });
+  
+        
+    } else {
+    }
+    })
+    console.log("matching words in array: " + JSON.stringify(searchResults))
+    res.json(searchResults) 
+  
+  }
+
+
 });
 
-// Implement your search logic here (e.g., using lodash or custom code)
-function performSearch(data, searchWords) {
-  const searchResults = [];
 
-  // Loop through each search word
-  searchWords.forEach((searchWord) => {
-    const pattern = new RegExp(searchWord, 'i');
-
-    // Filter the data based on the RegExp pattern
-    const matchingItems = data.filter((item) => {
-      // Replace the specific property name ('word' in this case) with the property you want to search in
-      return pattern.test(item.word);
-    });
-
-    // Add the matching items to the search results
-    searchResults.push(...matchingItems);
-  });
-
-  return searchResults;
-
-
-}
 
 module.exports = router;

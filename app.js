@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
+require('dotenv').config();
 const port = process.env.PORT || 5000;
 const cors = require("cors")
-
+require('./config/database');
 const newsRoutes = require('./routes/newsRoutes');
 const jsonTestRoutes = require('./routes/kanjiRoutes.js')
 const userRoutes = require('./routes/userRoutes')

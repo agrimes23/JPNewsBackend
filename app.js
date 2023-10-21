@@ -7,6 +7,8 @@ require('./config/database');
 const newsRoutes = require('./routes/newsRoutes');
 const jsonTestRoutes = require('./routes/kanjiRoutes.js')
 const userRoutes = require('./routes/userRoutes')
+const { ApolloServer, gql } = require('apollo-server-express')
+const { typeDefs, resolvers } = require('./graphql')
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
@@ -22,9 +24,11 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api', newsRoutes)
-// app.use('/api', kanjiRoutes)
 app.use('/api', jsonTestRoutes)
 app.use('/api/users', userRoutes)
+
+const server = new ApolloServer({ typeDefs, resolvers })
+server.applyMiddleware({ app, path: '/graphql'})
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`)

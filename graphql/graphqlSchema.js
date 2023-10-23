@@ -62,18 +62,15 @@
 const gql = require("graphql-tag")
 
 const typeDefs = gql`
+  type User {
+    name: String!
+    email: String!
+    password: String!
+  }
 
-type Query {
-  userAuth: [User!]!
-}
-
-"User is for user authnetication"
-type User {
-  name: String!
-  email: String!
-  password: String!
-}
-
+  type Query {
+    userAuth: [User!]!
+  }
 `;
 
 module.exports = typeDefs

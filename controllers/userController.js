@@ -74,15 +74,27 @@ const loginUser = async (req, res) => {
 // @desc Get user data
 // @route GET /api/users/me
 // @access Private
-const getUser = async (req, res) => {
-    const { _id, name, email } = await User.findById(req.user.id)
+const getUser = async (id) => {
+    const user = await User.findById(id)
 
-    res.status(200).json({
-        id: _id,
-        name,
-        email
-    })
+    if (!user) {
+        return null;
+    }
+
+    return user;
 }
+
+// for dev testing only
+const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+        return users;
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        throw new Error('Failed to fetch users');
+      }
+  };
+
 
 // Generate Token
 const generateToken = (id) => {
@@ -94,5 +106,6 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
-    getUser
+    getUser,
+    getAllUsers
 }

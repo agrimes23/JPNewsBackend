@@ -59,17 +59,16 @@
 //   mutation: Mutation,
 // });
 
-const gql = require("graphql-tag")
-
-const typeDefs = gql`
+const typeDefs = `#graphql
   type User {
-    name: String!
-    email: String!
-    password: String!
+    id: ID,
+    name: String!,
+    email: String!,
   }
 
   type Query {
-    userAuth: [User!]!
+    getUsers: [User]
+    getUserById(id: ID!): User
   }
 `;
 

@@ -1,5 +1,6 @@
 const { getAllUsers, getUser, registerUser, login } = require('../controllers/userController');
 const { getKanjiByLevel, getTopNews } = require("../controllers/kanjiNewsController")
+const {protect} = require("../middleware/authMiddleware")
 const User = require("../models/userModel")
 
 // Define resolvers
@@ -10,8 +11,13 @@ const resolvers = {
       return users;
     },
     // args is the query variable
-    getUserById: async (_, args, context) => {
-      const user = await getUser(args.id);
+    getUserById: async (_, args, contextValue) => {
+
+      const id = await protect(args);
+      if (!args) {
+        throw new Error('Not authorized. Please log in.');
+      }
+      const user = await getUser(id);
       return user
     },
     getKanji: async (_, args, context) => {

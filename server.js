@@ -11,6 +11,7 @@ const typeDefs = require('./graphql/graphqlSchema.js')
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const resolvers = require("./graphql/resolvers.js")
+const getUserById = require("./controllers/userController")
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
@@ -31,20 +32,33 @@ app.use(cors())
 
 const server = new ApolloServer({ 
     typeDefs, // definition of types of data
-    resolvers
+    resolvers,
+    introspection: true,
+    context: async ({ req }) => {
+        // Your authentication and authorization logic here
+        const token = req.headers.authorization || '';
+    
+        // Verify and extract user information from the token
+        const user = getUserById(token);
+    
+        if (!user) {
+          // Unauthorized user
+          throw new GraphQLError('User is not authenticated', {
+            extensions: {
+              code: 'UNAUTHENTICATED',
+              http: { status: 401 },
+            },
+          });
+        }
+    
+        return { user };
+      },
 })
-
-// app.use('/api', newsRoutes)
-// app.use('/api', jsonTestRoutes)
-// app.use('/api/users', userRoutes)
-
-// app.listen(port, () => {
-//     console.log(`Server is running at ${url}`)
-// })
 
 async function start() {
     const { url } = await startStandaloneServer(server, {
-        listen: {port: 4000}
+        
+          listen: {port: 4000},
     })
     console.log(`Server is running at ${url}`)
 }

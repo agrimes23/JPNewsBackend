@@ -12,7 +12,10 @@ const resolvers = {
     getUserById: async (_, args, context) => {
       const user = await getUser(args.id);
       return user
-    }
+    },
+    // getKanji: async (_, args, context) {
+    //   const user = await
+    // }
   },
 };
 

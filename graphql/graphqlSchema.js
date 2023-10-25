@@ -61,14 +61,19 @@
 
 const typeDefs = `#graphql
   type User {
-    id: ID,
+    id: ID!,
     name: String!,
     email: String!,
+  }
+
+  type KanjiList {
+    word: [String!],
   }
 
   type Query {
     getUsers: [User]
     getUserById(id: ID!): User
+    getKanji(level: Int!): KanjiList
   }
 `;
 

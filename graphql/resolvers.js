@@ -16,12 +16,17 @@ const resolvers = {
     },
     getKanji: async (_, args, context) => {
       const kanjiList = await getKanjiByLevel(args.level)
-      console.log("check check")
       return kanjiList;
     },
-    // getNews: async (_, args, context) => {
-    //   const newsData = await getTopNews();
-    // },
+    getArticles: async (_, args, context) => {
+      try {
+        const newsData = await getTopNews();
+        return newsData;
+      } catch (error) {
+        console.error("Error in fetching data from third-party API: ", error)
+      }
+      
+    },
   },
 };
 

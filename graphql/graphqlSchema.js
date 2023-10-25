@@ -61,20 +61,47 @@
 
 const typeDefs = `#graphql
   type User {
-    id: ID!,
-    name: String!,
-    email: String!,
+    id: ID!
+    name: String!
+    email: String!
   }
 
   type KanjiList {
-    word: [String!],
+    word: [String!]
   }
+
+  type Article {
+  source: ArticleSource
+  author: String
+  title: String
+  description: String
+  url: String
+  urlToImage: String
+  publishedAt: String
+  content: String
+}
+
+type ArticleSource {
+  id: String
+  name: String
+}
+
+type ApiResponse {
+  status: String
+  totalResults: Int
+  articles: [Article]
+}
 
   type Query {
     getUsers: [User]
     getUserById(id: ID!): User
     getKanji(level: Int!): KanjiList
+    getArticles: ApiResponse
   }
+
+  # type Mutation {
+  #   deleteUser(id: ID!): [User]
+  # }
 `;
 
 module.exports = typeDefs

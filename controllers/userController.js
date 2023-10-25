@@ -5,21 +5,19 @@ const User = require('../models/userModel')
 // @desc Register new user
 // @route POST /api/users
 // @access Public
-const registerUser = async (req, res) => {
+const registerUser = async (input) => {
 
-    const { name, email, password } = req.body
-
+    const { name, email, password } = input
+    console.log("name, email, pw: ", name + " " + email + " " + password)
     if(!name || !email || !password) {
-        res.status(400).send("Please add all fields")
-        return;
+        throw new Error("Please provide all required fields");
     }
 
     // check if user exists
     const userExisits = await User.findOne({email})
 
     if (userExisits) {
-        res.status(400).send("User already exists")
-        return;
+        throw new Error("User already exists");
     }
 
     // Hash password
@@ -34,15 +32,10 @@ const registerUser = async (req, res) => {
     })
 
     if (user) {
-        res.status(201).json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            token: generateToken(user._id)
-        })
+        const token = generateToken(user._id);
+        return { user, token };
     } else {
-        res.status(400).send("Invalid user data")
-        return;
+        throw new Error("Invalid user data");
     }
 
 }
@@ -50,22 +43,18 @@ const registerUser = async (req, res) => {
 // @desc Authenticate a user
 // @route POST /api/users/login
 // @access Public
-const loginUser = async (req, res) => {
+const login = async (input) => {
 
-    const { email, password } = req.body
+    const { email, password } = input
 
     // Check for user email
     const user = await User.findOne({email})
 
     if (user && (await bcrypt.compare(password, user.password))) {
-        res.json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            token: generateToken(user._id)
-        })
+        const token = generateToken(user._id);
+        return { user, token };
     } else {
-        res.status(400).send("Invalid credentials")
+        throw new Error("Invalid credentials");
     }
 
     
@@ -105,7 +94,7 @@ const generateToken = (id) => {
 
 module.exports = {
     registerUser,
-    loginUser,
+    login,
     getUser,
     getAllUsers
 }

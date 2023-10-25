@@ -1,4 +1,4 @@
-const { getAllUsers, getUser } = require('../controllers/userController');
+const { getAllUsers, getUser, registerUser, login } = require('../controllers/userController');
 const { getKanjiByLevel, getTopNews } = require("../controllers/kanjiNewsController")
 const User = require("../models/userModel")
 
@@ -28,6 +28,24 @@ const resolvers = {
       
     },
   },
+  Mutation: {
+    deleteUser: async (_, args, context) => {
+      console.log("oo deleted forever :( ")
+      return
+    },
+    registerUser: async (parent, { input }, context) => {
+      if (context.user) {
+        throw new Error('You are already logged in')
+      }
+      return registerUser(input)
+    },
+    loginUser: async (parent, { input }, context) => {
+      if (context.user) {
+        throw new Error('You are already logged in')
+      }
+      return login(input);
+    }
+  }
 };
 
 module.exports = resolvers;

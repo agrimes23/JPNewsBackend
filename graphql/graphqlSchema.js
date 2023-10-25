@@ -71,26 +71,26 @@ const typeDefs = `#graphql
   }
 
   type Article {
-  source: ArticleSource
-  author: String
-  title: String
-  description: String
-  url: String
-  urlToImage: String
-  publishedAt: String
-  content: String
-}
+    source: ArticleSource
+    author: String
+    title: String
+    description: String
+    url: String
+    urlToImage: String
+    publishedAt: String
+    content: String
+  }
 
-type ArticleSource {
-  id: String
-  name: String
-}
+  type ArticleSource {
+    id: String
+    name: String
+  }
 
-type ApiResponse {
-  status: String
-  totalResults: Int
-  articles: [Article]
-}
+  type ApiResponse {
+    status: String
+    totalResults: Int
+    articles: [Article]
+  }
 
   type Query {
     getUsers: [User]
@@ -99,9 +99,28 @@ type ApiResponse {
     getArticles: ApiResponse
   }
 
-  # type Mutation {
-  #   deleteUser(id: ID!): [User]
-  # }
+  type Mutation {
+    registerUser(input: UserInput!): AuthPayload
+    loginUser(input: LoginInput!): AuthPayload
+    deleteUser(id: ID!): [User]
+  }
+
+  input UserInput {
+    name: String!
+    email: String!
+    password: String!
+  }
+
+  input LoginInput {
+  email: String!
+  password: String!
+}
+
+  type AuthPayload {
+    user: User
+    token: String
+  }
+
 `;
 
 module.exports = typeDefs

@@ -9,7 +9,7 @@ const getKanjiByLevel = async (kanjiLevel) => {
       const response = await axios.get(
         `https://newsapi.org/v2/top-headlines?country=jp&apiKey=${process.env.NEWS_API_KEY}`
     );
-      const jlptLeveldata = JSON.parse(fs.readFileSync(`./db/n${level}.json`, 'utf8'));
+      const jlptLeveldata = JSON.parse(fs.readFileSync(`./db/${level}.json`, 'utf8'));
   
     //   console.log("response.data: " + JSON.stringify(response.data))
       return performSearch(response.data.articles, jlptLeveldata)

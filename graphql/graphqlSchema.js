@@ -95,7 +95,7 @@ const typeDefs = `#graphql
   type Query {
     getUsers: [User]
     getUserById(id: ID!): User
-    getKanji(level: Int!): KanjiList
+    getKanji(level: String!): KanjiList
     getArticles: ApiResponse
   }
 

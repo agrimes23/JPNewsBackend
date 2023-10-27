@@ -12,3 +12,5 @@ Next step after authentication and creating a user profile is to create another 
 - GraphQL
 - MongoDB
 - Mongoose
+
+See the frontend code: https://github.com/agrimes23/ReactJLPTNews
